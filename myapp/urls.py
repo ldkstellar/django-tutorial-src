@@ -19,7 +19,6 @@ from myapp import views
 urlpatterns = [
     path('', views.index),
     path('create/', views.create),
-    path('read/<id>/', views.read),
-    path('update/<id>/', views.update),
-    path('delete/', views.delete)
+    path('read/<id>/', views.read),# 꺽쇠는 바뀔수있는값
+
 ]
