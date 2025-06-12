@@ -1,15 +1,25 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import HttpResponse, redirect
+from django.http import HttpRequest
 import random
 from django.views.decorators.csrf import csrf_exempt
 next_Id = 4
 topics = [
     {'id':1,'title':'routing','body':'Routing is ...'},
     {'id':2,'title':'view','body':'View is ...'},
-    {'id':3,'title':'Model','body':'Model is ...'},
+    {'id':3,'title':'Model','body':'Model is ...'}
 ]
 
-def HTMLTemplate(article:str):
+def HTMLTemplate(article:str,id=None):
     global topics
+    contextUI = ''
+    if id !=None:
+        contextUI = f'''
+            <form action="/delete/" method="post">
+                <input type="hidden" name="id" value={id}></input>
+                <input type="submit" value="delete"></input>
+            </form>
+        
+        '''
     ol = ''
     for topic in topics:
         ol+= f'<li><a href="/read/{topic["id"]}">{topic["title"]}</a></li>'    
@@ -21,7 +31,11 @@ def HTMLTemplate(article:str):
                {ol}
             </ol>
             {article}
+        <ul>
             <a href="/create/">create</a>
+        {contextUI}
+        </ul>    
+        
     </body>
 </html>
 '''
@@ -60,4 +74,16 @@ def read(request ,id):
             article = f'''<h2>{topic["title"]}</h2>
             <h3>{topic["body"]}</h3>'''
         
-    return HttpResponse(HTMLTemplate(article))
+    return HttpResponse(HTMLTemplate(article,id))
+
+@csrf_exempt
+def delete(request:HttpRequest):
+    global topics
+    if request.method == 'POST':
+        newTopics = []
+        id = request.POST["id"]
+        for topic in topics:
+            if topic["id"] != int(id):
+                newTopics.append(topic)
+        topics = newTopics
+        return redirect("/")
