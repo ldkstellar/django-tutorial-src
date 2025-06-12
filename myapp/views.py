@@ -1,6 +1,5 @@
 from django.shortcuts import HttpResponse, redirect
 from django.http import HttpRequest
-import random
 from django.views.decorators.csrf import csrf_exempt
 next_Id = 4
 topics = [
