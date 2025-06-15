@@ -20,5 +20,6 @@ urlpatterns = [
     path('', views.index),
     path('create/', views.create),
     path('read/<id>/', views.read),# 꺽쇠는 바뀔수있는값
-    path('delete/',views.delete)
+    path('delete/',views.delete),
+    path('update/<id>/',views.update)
 ]
